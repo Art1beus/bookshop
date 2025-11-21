@@ -2,46 +2,22 @@ from django.http import HttpResponseRedirect, HttpResponseNotFound
 from django.shortcuts import render
 from .models import *
 
-
 def index(request):
-    books = Books.objects.all()
     orders = Orders.objects.all()
-    return render(request, 'index.html', {'books': books, 'orders': orders,})
+    return render(request, 'index.html', {'orders': orders})
 
-
-def edit(request, id):
-    try:
-        book = Books.objects.get(id=id)
-        if request.method == "POST":
-            book.title = request.POST.get("title")
-            book.author = request.POST.get("author")
-            book.price = request.POST.get("price")
-            book.save()
-            return HttpResponseRedirect("/")
-        else:
-            return render(request, "edit.html", {"book": book})
-    except Books.DoesNotExist:
-        return HttpResponseNotFound("<h2>Book not found</h2>")
-
-
-def delete(request, id):
-    try:
-        book = Books.objects.get(id=id)
-        book.delete()
-        return HttpResponseRedirect("/")
-    except Books.DoesNotExist:
-        return HttpResponseNotFound("<h2>Book not found</h2>")
-
-
-def create(request):
+def create_order(request):
     if request.method == "POST":
-        book = Books()
-        book.title = request.POST.get("title")
-        book.author = request.POST.get("author")
-        book.price = request.POST.get("price")
-        book.save()
+        surname = request.POST.get("surname")
+        if not surname:
+            return HttpResponseNotFound("<h2>Фамилия не указана</h2>")
+
+        order = Orders.objects.create(surname=surname)
+        for book_id in request.POST.getlist("books"):
+            OrderedBooks.objects.create(order=order, book_id=book_id, quantity=1)
         return HttpResponseRedirect("/")
+
     books = Books.objects.all()
-    return render(request, "create.html", {"books": books})
+    return render(request, "create_order.html", {"books": books})
 
 

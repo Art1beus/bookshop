@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Добавление заказчика</title>
+</head>
+<body>
+<h2>Добавление заказчика и его заказа</h2>
+<form method="POST">
+    {% csrf_token %}
+    <p>
+        <label>Введите фамилию заказчика</label><br>
+        <input type="text" name="surname">
+    </p>
+
+    <p>
+        <b>Выберите книги:</b><br>
+        {% for book in books %}
+            <label>
+                <input type="checkbox" name="books" value="{{ book.id }}">
+                {{ book.title }} — {{ book.author }} ({{ book.price }})
+            </label><br>
+        {% empty %}
+            <span>Нет доступных книг</span>
+        {% endfor %}
+    </p>
+    <input type="submit" value="Сохранить">
+</form>
+</body>
+</html>

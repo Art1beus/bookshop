@@ -5,7 +5,5 @@ from app import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index),
-    path("edit/<int:id>/", views.edit),
-    path("delete/<int:id>/", views.delete),
-    path("create/", views.create),
+    path('create-order/', views.create_order, name='create_order'),
 ]

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Главная</title>
+</head>
+
+<body>
+    <div>
+        <table>
+            <thead>
+                <tr>
+                    <th>Название</th>
+                    <th>Автор</th>
+                    <th>Цена</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for book in books %}
+                <tr>
+                    <td>{{ book.title }}</td>
+                    <td>{{ book.author }}</td>
+                    <td>{{ book.price }}</td>
+                    <td>
+                        <a href="edit/{{ book.id }}">Изменить</a> |
+                        <a href="delete/{{ book.id }}">Удалить</a>
+                    </td>
+                </tr>
+
+                {% for item in book.orderedbooks_set.all %}
+                <tr style="font-size: 15px;">
+                    <td>Клиент: {{ item.order.surname }}</td>
+                    <td>Дата: {{ item.order.date }}</td>
+                    <td>Количество: {{ item.quantity }}</td>
+                    <td colspan="2"></td>
+                </tr>
+                {% endfor %}
+
+                {% endfor %}
+                <tr>
+                    <td>
+                        <a href="create">Добавить</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</body>
+</html>
